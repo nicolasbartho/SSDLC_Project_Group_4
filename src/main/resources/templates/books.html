@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Books - Mini Library</title>
+</head>
+<body>
+    <h1>Book catalogue</h1>
+    <p><a href="/">Home</a> |
+       <span sec:authorize="hasRole('LIBRARIAN')"><a href="/admin/books">Manage books</a> | </span>
+       <form th:action="@{/logout}" method="post" style="display:inline"><button type="submit">Log out</button></form>
+    </p>
+
+    <form th:action="@{/books}" method="get">
+        <input type="text" name="q" th:value="${query}" maxlength="200" placeholder="Search by title">
+        <button type="submit">Search</button>
+    </form>
+
+    <table border="1" cellpadding="6">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Available</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.category}"></td>
+            <td th:text="${book.availableCopies} + ' / ' + ${book.totalCopies}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(books)}">
+            <td colspan="4">No books found.</td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

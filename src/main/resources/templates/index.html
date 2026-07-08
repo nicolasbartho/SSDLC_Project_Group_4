@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Library</title>
+</head>
+<body>
+    <h1>Mini Library Management</h1>
+
+    <div sec:authorize="isAuthenticated()">
+        <p>Signed in as <span sec:authentication="name"></span>.</p>
+        <a href="/books">Browse books</a> |
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit">Log out</button>
+        </form>
+    </div>
+
+    <div sec:authorize="!isAuthenticated()">
+        <a href="/login">Log in</a> | <a href="/register">Register</a>
+    </div>
+</body>
+</html>

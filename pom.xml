@@ -46,6 +46,13 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!-- Actuator: only used for /actuator/health (readiness probe in CI/CD).
+             Details are disabled in application.yml to avoid leaking internals. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <!-- Thymeleaf for simple server-rendered views (optional UI) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

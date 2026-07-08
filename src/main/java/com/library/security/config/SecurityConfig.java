@@ -48,6 +48,9 @@ public class SecurityConfig {
                 // Public endpoints
                 .requestMatchers("/", "/register", "/login", "/css/**", "/js/**", "/error").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+                // Only the bare "up/down" status is exposed (see application.yml),
+                // no environment/config details - safe for CI readiness checks.
+                .requestMatchers("/actuator/health").permitAll()
                 // Read-only catalogue browsing available to any authenticated user
                 .requestMatchers("/books", "/books/search").authenticated()
                 // Librarian/admin-only management endpoints
@@ -89,6 +92,26 @@ public class SecurityConfig {
                 .referrerPolicy(referrer -> referrer
                         .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
                 )
+                // Fixes ZAP WARN 10038 "CSP Header Not Set". Restrictive by
+                // default: only same-origin scripts/styles/images, no
+                // plugins, no framing. Loosen only if a specific page
+                // genuinely needs an external resource.
+                .contentSecurityPolicy(csp -> csp.policyDirectives(
+                        "default-src 'self'; " +
+                        "script-src 'self'; " +
+                        "style-src 'self' 'unsafe-inline'; " +
+                        "img-src 'self'; " +
+                        "object-src 'none'; " +
+                        "frame-ancestors 'none'; " +
+                        "base-uri 'self'; " +
+                        "form-action 'self'"
+                ))
+                // Fixes ZAP WARN 10063 "Permissions-Policy Header Not Set".
+                // Disables browser features this app never uses.
+                .addHeaderWriter(new org.springframework.security.web.header.writers.StaticHeadersWriter(
+                        "Permissions-Policy",
+                        "geolocation=(), camera=(), microphone=(), payment=()"
+                ))
             );
             // Note: CSRF protection is left ENABLED (Spring Security default).
             // If a pure stateless JSON API is added later, prefer token-based

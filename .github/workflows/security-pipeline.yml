@@ -103,20 +103,17 @@ jobs:
 
       - name: Wait for application readiness
         run: |
-          # We only check that the server is listening and responding to
-          # HTTP, not that a given page returns 200 - the Thymeleaf
-          # login view doesn't exist yet at this stage of the project, so
-          # a 404/403 still proves the app booted successfully.
+          # Real readiness probe now that /actuator/health exists (only
+          # the bare UP/DOWN status is exposed, see application.yml).
           for i in $(seq 1 30); do
-            code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/login || echo "000")
-            if [ "$code" != "000" ]; then
-              echo "Application is up (HTTP $code)"
+            if curl -sf http://localhost:8080/actuator/health > /dev/null; then
+              echo "Application is up"
               exit 0
             fi
             echo "Waiting for application to start... ($i/30)"
             sleep 2
           done
-          echo "Application did not become reachable in time"
+          echo "Application did not become ready in time"
           cat app.log
           exit 1
 
@@ -126,9 +123,10 @@ jobs:
           target: 'http://localhost:8080'
           fail_action: true
           cmd_options: '-a'
-          # Optional: point to a rules file to downgrade accepted
-          # false positives/low-priority findings instead of failing on them.
-          # rules_file_name: '.zap/rules.tsv'
+          # Downgrades reviewed false-positives/accepted-risk findings to
+          # INFO (see .zap/rules.tsv for justification of each one). Real
+          # issues are fixed in code, not silenced here.
+          rules_file_name: '.zap/rules.tsv'
 
       - name: Stop application
         if: always()
