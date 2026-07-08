@@ -1,0 +1,40 @@
+# No hardcoded credentials/secrets: everything sensitive is read from
+# environment variables, with safe local-dev defaults (H2 in-memory) so
+# the app still boots out of the box for the assignment demo.
+
+spring:
+  application:
+    name: library-management
+
+  datasource:
+    url: ${DB_URL:jdbc:h2:mem:librarydb;DB_CLOSE_DELAY=-1}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:}
+    driver-class-name: ${DB_DRIVER:org.h2.Driver}
+
+  jpa:
+    hibernate:
+      # 'update' is convenient for the assignment; use 'validate' with a
+      # real migration tool (Flyway/Liquibase) for anything beyond a demo.
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+
+  thymeleaf:
+    cache: false
+
+server:
+  error:
+    # Never leak stack traces / internal details in HTTP error responses.
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false
+  port: ${SERVER_PORT:8080}
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO

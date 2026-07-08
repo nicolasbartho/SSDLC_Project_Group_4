@@ -1,0 +1,20 @@
+package com.library.security.repository;
+
+import com.library.security.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+/**
+ * Spring Data JPA repository. All derived queries and @Query usages here
+ * are automatically parameterized by Spring Data - no string concatenation
+ * with user input is performed anywhere in this codebase.
+ */
+public interface UserRepository extends JpaRepository<User, Long> {
+
+    Optional<User> findByUsername(String username);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
+}
