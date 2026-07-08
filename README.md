@@ -49,7 +49,7 @@ A **secure mini web application** for library management, designed with security
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-org/SSDLC_Project_Group01.git
+   git clone https://github.com/your-org/SSDLC_Project_Group_4.git
    cd SSDLC_Project_Group_4
 
 
