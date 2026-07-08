@@ -25,6 +25,17 @@ spring:
   thymeleaf:
     cache: false
 
+management:
+  endpoints:
+    web:
+      exposure:
+        # Only "health" is exposed - never "env", "beans", "heapdump", etc.
+        include: health
+  endpoint:
+    health:
+      # Never show DB URLs, disk paths or other internals in the response.
+      show-details: never
+
 server:
   error:
     # Never leak stack traces / internal details in HTTP error responses.

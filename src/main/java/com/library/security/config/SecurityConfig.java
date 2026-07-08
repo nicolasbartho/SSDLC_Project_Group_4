@@ -48,6 +48,9 @@ public class SecurityConfig {
                 // Public endpoints
                 .requestMatchers("/", "/register", "/login", "/css/**", "/js/**", "/error").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+                // Only the bare "up/down" status is exposed (see application.yml),
+                // no environment/config details - safe for CI readiness checks.
+                .requestMatchers("/actuator/health").permitAll()
                 // Read-only catalogue browsing available to any authenticated user
                 .requestMatchers("/books", "/books/search").authenticated()
                 // Librarian/admin-only management endpoints
