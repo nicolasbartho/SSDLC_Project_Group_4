@@ -51,3 +51,29 @@ A **secure mini web application** for library management, designed with security
    ```bash
    git clone https://github.com/your-org/SSDLC_Project_Group01.git
    cd SSDLC_Project_Group01
+
+
+SSDLC_Project_Group01/
+├── src/
+│   ├── main/
+│   │   ├── java/com/library/
+│   │   │   ├── config/          # Security config (Spring Security)
+│   │   │   ├── controller/      # REST/Web controllers
+│   │   │   ├── model/           # Entities (Book, User, Loan)
+│   │   │   ├── repository/      # JPA repositories
+│   │   │   ├── service/         # Business logic
+│   │   │   └── LibraryApplication.java
+│   │   └── resources/
+│   │       ├── static/          # CSS/JS
+│   │       ├── templates/       # Thymeleaf HTML
+│   │       └── application.properties
+│   └── test/                    # Unit/Integration tests
+├── docs/
+│   ├── DFD.png                  # Data Flow Diagram
+│   ├── STRIDE_Analysis.md       # Threat modeling
+│   └── CI_CD_Pipeline.md        # DevSecOps pipeline
+├── slides/
+│   └── SSDLC_Presentation.pptx   # Presentation slides
+├── .gitignore
+├── pom.xml                      # Maven dependencies
+└── README.md
