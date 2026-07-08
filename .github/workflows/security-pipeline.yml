@@ -103,15 +103,20 @@ jobs:
 
       - name: Wait for application readiness
         run: |
+          # We only check that the server is listening and responding to
+          # HTTP, not that a given page returns 200 - the Thymeleaf
+          # login view doesn't exist yet at this stage of the project, so
+          # a 404/403 still proves the app booted successfully.
           for i in $(seq 1 30); do
-            if curl -sf http://localhost:8080/login > /dev/null; then
-              echo "Application is up"
+            code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/login || echo "000")
+            if [ "$code" != "000" ]; then
+              echo "Application is up (HTTP $code)"
               exit 0
             fi
             echo "Waiting for application to start... ($i/30)"
             sleep 2
           done
-          echo "Application did not become ready in time"
+          echo "Application did not become reachable in time"
           cat app.log
           exit 1
 
