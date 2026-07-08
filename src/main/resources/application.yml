@@ -44,6 +44,18 @@ server:
     include-stacktrace: never
     include-exception: false
   port: ${SERVER_PORT:8080}
+  servlet:
+    session:
+      cookie:
+        # Fixes ZAP WARN 10054 "Cookie without SameSite Attribute".
+        # Lax (not Strict) so a login redirect from an external link still
+        # works, while cross-site requests can't ride the session cookie.
+        same-site: lax
+        http-only: true
+        # 'Secure' is left to the reverse proxy/load balancer in front of
+        # this app in a real deployment (this dev/demo profile runs on
+        # plain HTTP, so forcing Secure here would break every cookie).
+        name: LIBRARY_SESSION
 
 logging:
   level:

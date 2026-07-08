@@ -123,9 +123,10 @@ jobs:
           target: 'http://localhost:8080'
           fail_action: true
           cmd_options: '-a'
-          # Optional: point to a rules file to downgrade accepted
-          # false positives/low-priority findings instead of failing on them.
-          # rules_file_name: '.zap/rules.tsv'
+          # Downgrades reviewed false-positives/accepted-risk findings to
+          # INFO (see .zap/rules.tsv for justification of each one). Real
+          # issues are fixed in code, not silenced here.
+          rules_file_name: '.zap/rules.tsv'
 
       - name: Stop application
         if: always()

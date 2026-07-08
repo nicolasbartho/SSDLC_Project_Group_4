@@ -1,0 +1,41 @@
+# ZAP Baseline rules file - https://www.zaproxy.org/docs/docker/baseline-scan/
+# Format: <rule id>	<threshold: IGNORE|INFO|WARN|FAIL>	<url regex (optional)>	<comment>
+#
+# Genuine, actionable findings (CSP, Permissions-Policy, cookie SameSite,
+# see 10038 / 10063 / 10054) are FIXED IN CODE (SecurityConfig.java,
+# application.yml) rather than silenced here - only findings reviewed and
+# judged to be false positives or accepted low-priority risk for the scope
+# of this assignment are downgraded below. See docs/dast-findings.md for
+# the full write-up required by the assignment brief.
+
+# Informational scan-metadata alerts, not vulnerabilities: ZAP confirming
+# it recognised a login form / session response. Nothing to fix.
+10111	INFO		Authentication Request Identified - informational confirmation that ZAP found the login form.
+10112	INFO		Session Management Response Identified - informational confirmation, not a finding.
+
+# Reviewed and judged false positive: our Thymeleaf templates use th:field,
+# which HTML-escapes all output by default; no th:utext (raw/unescaped
+# output) is used anywhere in the codebase, so reflected user input cannot
+# break out of the attribute context.
+10031	INFO		User Controllable HTML Element Attribute (Potential XSS) - Thymeleaf auto-escapes th:field output; no unescaped th:utext used.
+
+# Reviewed and judged false positive: no debug/TODO/FIXME comments exist in
+# our HTML templates; matches on generic HTML boilerplate.
+10027	INFO		Information Disclosure - Suspicious Comments - no debug comments present in templates (verified manually).
+
+# Reviewed and judged false positive: the pattern match is on the CSRF
+# token / session identifier, which are expected opaque tokens, not
+# secrets that are meaningful outside an authenticated session.
+10094	INFO		Base64 Disclosure - matches expected CSRF/session tokens, not a leaked secret.
+
+# Accepted low priority for this assignment's scope: these headers matter
+# mainly for cross-origin resource isolation (SharedArrayBuffer, COOP/COEP)
+# and browser-side fetch metadata, neither of which this simple
+# server-rendered app relies on.
+90004	INFO		Cross-Origin-Embedder-Policy Header Missing - no cross-origin isolation requirement (no SharedArrayBuffer/worker usage).
+90005	INFO		Sec-Fetch-Dest Header is Missing - this is a request header sent by the browser, not one the server can set.
+
+# Accepted low priority: response caching headers on public, non-sensitive
+# pages (login/register) and on 401 responses for robots.txt/sitemap.xml,
+# which do not exist and carry no sensitive data.
+10049	INFO		Non-Storable Content - informational, no sensitive data is served on these routes.
