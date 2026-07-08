@@ -1,0 +1,97 @@
+                    
+                    
+┌──────────────────┐
+│ 17 Code Findings │
+└──────────────────┘
+                                           
+    .github/workflows/security-pipeline.yml
+    ❯❱ yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+          ❰❰ Blocking ❱❱
+          GitHub Actions step uses a mutable tag or branch reference. Tags and branch names can be silently   
+          repointed by the action owner, enabling supply-chain attacks — as seen in the trivy-action and kics-
+          github-action compromises. Pin the reference to a full 40-character commit SHA instead, e.g. `uses: 
+          actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608`.                                         
+          Details: https://sg.run/2LgAL                                                                       
+                                                                                                              
+           16┆ - uses: actions/checkout@v4
+            ⋮┆----------------------------------------
+           19┆ uses: actions/setup-java@v4
+            ⋮┆----------------------------------------
+           29┆ uses: actions/upload-artifact@v4
+            ⋮┆----------------------------------------
+           39┆ - uses: actions/checkout@v4
+            ⋮┆----------------------------------------
+           42┆ uses: semgrep/semgrep-action@v1
+            ⋮┆----------------------------------------
+           57┆ - uses: actions/checkout@v4
+            ⋮┆----------------------------------------
+           60┆ uses: dependency-check/Dependency-Check_Action@main
+            ⋮┆----------------------------------------
+           69┆ uses: actions/upload-artifact@v4
+            ⋮┆----------------------------------------
+           84┆ - uses: actions/checkout@v4
+            ⋮┆----------------------------------------
+           87┆ uses: actions/setup-java@v4
+            ⋮┆----------------------------------------
+           93┆ uses: actions/download-artifact@v4
+            ⋮┆----------------------------------------
+          121┆ uses: zaproxy/action-baseline@v0.12.0
+            ⋮┆----------------------------------------
+          137┆ uses: actions/upload-artifact@v4
+                                           
+    src/main/resources/templates/books.html
+    ❯❱ python.django.security.django-no-csrf-token.django-no-csrf-token
+          ❰❰ Blocking ❱❱
+          Manually-created forms in django templates should specify a csrf_token to prevent CSRF attacks.
+          Details: https://sg.run/N0Bp                                                                   
+                                                                                                         
+           11┆ <form th:action="@{/logout}" method="post" style="display:inline"><button type="submit">Log
+               out</button></form>                                                                        
+                                           
+    src/main/resources/templates/index.html
+    ❯❱ python.django.security.django-no-csrf-token.django-no-csrf-token
+          ❰❰ Blocking ❱❱
+          Manually-created forms in django templates should specify a csrf_token to prevent CSRF attacks.
+          Details: https://sg.run/N0Bp                                                                   
+                                                                                                         
+           13┆ <form th:action="@{/logout}" method="post" style="display:inline">
+           14┆     <button type="submit">Log out</button>
+           15┆ </form>
+                                           
+    src/main/resources/templates/login.html
+    ❯❱ python.django.security.django-no-csrf-token.django-no-csrf-token
+          ❰❰ Blocking ❱❱
+          Manually-created forms in django templates should specify a csrf_token to prevent CSRF attacks.
+          Details: https://sg.run/N0Bp                                                                   
+                                                                                                         
+           17┆ <form th:action="@{/login}" method="post">
+           18┆     <div>
+           19┆         <label for="username">Username</label>
+           20┆         <input type="text" id="username" name="username" maxlength="50" required autofocus>
+           21┆     </div>
+           22┆     <div>
+           23┆         <label for="password">Password</label>
+           24┆         <input type="password" id="password" name="password" maxlength="128" required>
+           25┆     </div>
+           26┆     <button type="submit">Log in</button>
+             [hid 1 additional lines, adjust with --max-lines-per-finding] 
+                                              
+    src/main/resources/templates/register.html
+    ❯❱ python.django.security.django-no-csrf-token.django-no-csrf-token
+          ❰❰ Blocking ❱❱
+          Manually-created forms in django templates should specify a csrf_token to prevent CSRF attacks.
+          Details: https://sg.run/N0Bp                                                                   
+                                                                                                         
+           10┆ <form th:action="@{/register}" th:object="${registerForm}" method="post">
+           11┆     <div>
+           12┆         <label for="username">Username</label>
+           13┆         <input type="text" id="username" th:field="*{username}" maxlength="50" required>
+           14┆         <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+               style="color:red"></span>                                                     
+           15┆     </div>
+           16┆     <div>
+           17┆         <label for="email">Email</label>
+           18┆         <input type="email" id="email" th:field="*{email}" maxlength="254" required>
+           19┆         <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+               style="color:red"></span>                                               
+             [hid 9 additional lines, adjust with --max-lines-per-finding] 
